@@ -31,7 +31,7 @@ class _FavouriteButtonState extends State<FavouriteButton> {
       style: TextButton.styleFrom(
         backgroundColor: isFavourite ? Colors.pink : Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(20.0),
           side: BorderSide(
             color: isFavourite ? Colors.pink : Colors.grey,
             width: 1.5,
@@ -40,9 +40,13 @@ class _FavouriteButtonState extends State<FavouriteButton> {
       ),
       child: Row(
         children: [
-          Icon(
-            isFavourite ? Icons.favorite : Icons.favorite_outline,
-            color: isFavourite ? Colors.white : Colors.grey,
+          IconTheme(
+            data: IconThemeData(
+              color: isFavourite ? Colors.white : Colors.grey,
+            ),
+            child: Icon(
+              isFavourite ? Icons.favorite : Icons.favorite_outline,
+            ),
           ),
           SizedBox(width: 8),
           Text(

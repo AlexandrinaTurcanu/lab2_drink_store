@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../models/wine.dart';
 import 'favourite_button.dart';
 
@@ -9,75 +10,76 @@ class WineListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final formatter = NumberFormat('#,##0', 'en_US');
+
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 8.0),
+      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
+        borderRadius: BorderRadius.circular(16.0),
+        side: BorderSide(color: Colors.grey[300]!, width: 1),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12.0),
-                  bottomLeft: Radius.circular(12.0),
+          Container(
+            padding: EdgeInsets.all(12.0),
+            color: Colors.white,
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+                  child: Container(
+                    color: Colors.grey[200],
+                    child: Image.network(
+                      wine.image,
+                      width: 100,
+                      height: 150,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-                child: Image.asset(
-                  wine.image,
-                  width: 100,
-                  height: 150,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                SizedBox(width: 12.0),
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.0),
-                          color: wine.isAvailable ? Colors.lightGreen[100] : Colors.redAccent,
-                        ),
-                        child: Text(
-                          wine.isAvailable ? 'Available' : 'Unavailable',
-                          style: TextStyle(
-                            color: wine.isAvailable ? Colors.green : Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      Text(
+                        wine.name,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
                         ),
                       ),
                       SizedBox(height: 8.0),
                       Text(
-                        wine.name,
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        wine.type,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey[600],
+                        ),
                       ),
                       SizedBox(height: 4.0),
-                      Row(
-                        children: [
-                          Icon(Icons.local_drink, size: 16),
-                          SizedBox(width: 4),
-                          Text('${wine.type} (${wine.grape})'),
-                        ],
+                      Text(
+                        '${wine.city}, ${wine.country}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey[600],
+                        ),
                       ),
-                      SizedBox(height: 4.0),
-                      Text('${wine.country}, ${wine.region}'),
                     ],
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           Container(
-            padding: EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(12.0),
             decoration: BoxDecoration(
               color: Colors.grey[200],
               borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(12.0),
-                bottomRight: Radius.circular(12.0),
+                bottomLeft: Radius.circular(16.0),
+                bottomRight: Radius.circular(16.0),
               ),
             ),
             child: Row(
@@ -88,15 +90,28 @@ class WineListItem extends StatelessWidget {
                   children: [
                     FavouriteButton(wine: wine),
                     SizedBox(height: 4),
-                    Text('Critics Score: ${wine.criticsScore}/100'),
+                    Text(
+                      'Critics Score: ${wine.criticScore}/100',
+                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                    ),
                   ],
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text('Price: ${wine.price}'),
+                    Text(
+                      '\$${formatter.format(wine.priceUsd)}',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
                     SizedBox(height: 4),
-                    Text('Bottle: ${wine.volume}ml'),
+                    Text(
+                      'Bottle: ${wine.bottleSize}',
+                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                    ),
                   ],
                 ),
               ],

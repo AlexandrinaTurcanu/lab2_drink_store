@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../data/mock_data.dart';
-import '../models/wine.dart';
+import 'package:get/get.dart';
+import '../controllers/wine_controller.dart';
 import 'widgets/custom_search_bar.dart';
 import 'widgets/filter_section.dart';
 import 'widgets/wine_list_item.dart';
@@ -13,8 +13,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  TextEditingController _searchController = TextEditingController();
-  List<Wine> displayedWines = mockWines;
+  final TextEditingController _searchController = TextEditingController();
+  final WineController wineController = Get.put(WineController());
   String selectedCategory = 'Type';
 
   @override
@@ -24,11 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _filterWines() {
-    setState(() {
-      displayedWines = mockWines
-          .where((wine) => wine.name.toLowerCase().contains(_searchController.text.toLowerCase()))
-          .toList();
-    });
+    wineController.filterWines(_searchController.text);
   }
 
   void _onFilterChanged(String category) {
@@ -73,7 +69,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Shop wines by',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),
@@ -98,12 +97,22 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: displayedWines.length,
-                itemBuilder: (context, index) {
-                  return WineListItem(wine: displayedWines[index]);
-                },
-              ),
+              child: Obx(() {
+                if (wineController.isLoading.value) {
+                  return Center(child: CircularProgressIndicator());
+                }
+
+                if (wineController.filteredWines.isEmpty) {
+                  return Center(child: Text('No wines found.'));
+                }
+
+                return ListView.builder(
+                  itemCount: wineController.filteredWines.length,
+                  itemBuilder: (context, index) {
+                    return WineListItem(wine: wineController.filteredWines[index]);
+                  },
+                );
+              }),
             ),
           ],
         ),

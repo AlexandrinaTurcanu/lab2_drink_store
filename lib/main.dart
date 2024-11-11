@@ -11,7 +11,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Drink Store',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        fontFamily: 'Roboto',
+        primarySwatch: Colors.pink,
+        scaffoldBackgroundColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: HomeScreen(),
