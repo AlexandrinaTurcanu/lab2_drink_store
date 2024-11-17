@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../models/wine.dart';
+import '../../domain/models/wine.dart';
 
 class FavouriteButton extends StatefulWidget {
   final Wine wine;

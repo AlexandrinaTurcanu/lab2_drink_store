@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../models/wine.dart';
+import '../../domain/models/wine.dart';
 import 'favourite_button.dart';
 
 class WineListItem extends StatelessWidget {

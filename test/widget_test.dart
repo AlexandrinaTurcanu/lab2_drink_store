@@ -1,30 +1,31 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:lab2_drink_store/main.dart';
+import 'package:lab2_drink_store/data/datasources/wine_datasource.dart';
+import 'package:lab2_drink_store/data/repositories/wine_repository_impl.dart';
+import 'package:lab2_drink_store/domain/usecases/get_wines.dart';
+import 'package:lab2_drink_store/domain/usecases/filter_wines.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+  testWidgets('HomeScreen widget test', (WidgetTester tester) async {
+    // Configure dependencies
+    final dataSource = WineDataSource();
+    final repository = WineRepositoryImpl(dataSource);
+    final getWinesUseCase = GetWines(repository);
+    final filterWinesUseCase = FilterWines(repository);
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Build the app and pass the dependencies
+    await tester.pumpWidget(
+      MyApp(
+        getWinesUseCase: getWinesUseCase,
+        filterWinesUseCase: filterWinesUseCase,
+      ),
+    );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Verify initial elements on the screen
+    expect(find.text('Shop wines by'), findsOneWidget);
+    expect(find.text('Wine'), findsOneWidget);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Perform additional widget-specific tests if needed
   });
 }
